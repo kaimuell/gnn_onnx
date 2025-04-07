@@ -22,7 +22,7 @@ class GnnOnnxApplicationTests {
 	@Test
 	void testModel() throws IOException, OrtException {
 
-			String modelFilePath = new ClassPathResource("gnn_model.onnx").getFile().getPath();
+		String modelFilePath = new ClassPathResource("gnn_model.onnx").getFile().getPath();
 		OrtEnvironment env = OrtEnvironment.getEnvironment();
 		OrtSession session = env.createSession(modelFilePath);
 
