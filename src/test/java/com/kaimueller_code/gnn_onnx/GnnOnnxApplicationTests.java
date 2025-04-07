@@ -47,23 +47,23 @@ class GnnOnnxApplicationTests {
 				intData[i][j] = rand.nextInt(2708);  // assume node indices range
 			}
 		}
-
+		try(
 		// Convert floatData to ONNX Tensor
 		OnnxTensor floatTensor = OnnxTensor.createTensor(env, floatData);
 
 		// Convert intData to ONNX Tensor
 		OnnxTensor intTensor = OnnxTensor.createTensor(env, intData);
+		) {
+			// Just print shapes to confirm
+			System.out.println("Float tensor shape: " + java.util.Arrays.toString(floatTensor.getInfo().getShape()));
+			System.out.println("Int tensor shape: " + java.util.Arrays.toString(intTensor.getInfo().getShape()));
 
-		// Just print shapes to confirm
-		System.out.println("Float tensor shape: " + java.util.Arrays.toString(floatTensor.getInfo().getShape()));
-		System.out.println("Int tensor shape: " + java.util.Arrays.toString(intTensor.getInfo().getShape()));
-
-		OrtSession.Result res = session.run(Map.of("nodes", floatTensor, "edges", intTensor));
-		System.out.println(res.get(0));
-
-		floatTensor.close();
-		intTensor.close();
-		res.close();
+			try (
+					OrtSession.Result res = session.run(Map.of("nodes", floatTensor, "edges", intTensor))
+			) {
+				System.out.println(res.get(0));
+			}
+		}
 	}
 
 }
